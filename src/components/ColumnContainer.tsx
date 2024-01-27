@@ -1,22 +1,28 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Column, Id, Task } from '../types'
 import TrashIcon from '../icons/TrashIcon'
-import { useSortable } from '@dnd-kit/sortable';
+import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from "@dnd-kit/utilities"
+import PlusIcon from '../icons/PlusIcon';
+import TaskCard from './TaskCard';
 
 interface ColumnContainerProps {
     column: Column;
     deleteColumn: (id: Id) => void;
     updateColumn: (id: Id, title: string) => void;
-    createTask?: (columnId: Id) => void;
-    updateTask?: (id: Id, content: string) => void;
-    deleteTask?: (id: Id) => void;
-    tasks?: Task[];
+    createTask: (columnId: Id) => void;
+    updateTask: (id: Id, content: string) => void;
+    deleteTask: (id: Id) => void;
+    tasks: Task[];
 }
 
-const ColumnContainer = ({ column, deleteColumn, updateColumn }: ColumnContainerProps) => {
+const ColumnContainer = ({ column, deleteColumn, updateColumn, createTask, tasks, deleteTask, updateTask }: ColumnContainerProps) => {
 
     const [editMode, setEditMode] = useState(false);
+
+    const tasksIds = useMemo(() => {
+        return tasks.map((task) => task.id);
+      }, [tasks]);
 
     const {
         setNodeRef,
@@ -74,9 +80,26 @@ const ColumnContainer = ({ column, deleteColumn, updateColumn }: ColumnContainer
                     <TrashIcon />
                 </button>
             </div>
-            <div className='flex flex-grow'>
-                content
-            </div>
+            <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
+        <SortableContext items={tasksIds}>
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}
+              updateTask={updateTask}
+            />
+          ))}
+        </SortableContext>
+      </div>
+            <button className="flex gap-2 items-center border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"
+                onClick={() => {
+                    createTask(column.id);
+                }}
+            >
+                <PlusIcon />
+                Add task
+            </button>
         </div>
     )
 }
