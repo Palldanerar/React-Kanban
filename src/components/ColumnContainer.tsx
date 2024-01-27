@@ -22,7 +22,7 @@ const ColumnContainer = ({ column, deleteColumn, updateColumn, createTask, tasks
 
     const tasksIds = useMemo(() => {
         return tasks.map((task) => task.id);
-      }, [tasks]);
+    }, [tasks]);
 
     const {
         setNodeRef,
@@ -81,17 +81,17 @@ const ColumnContainer = ({ column, deleteColumn, updateColumn, createTask, tasks
                 </button>
             </div>
             <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
-        <SortableContext items={tasksIds}>
-          {tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              deleteTask={deleteTask}
-              updateTask={updateTask}
-            />
-          ))}
-        </SortableContext>
-      </div>
+                <SortableContext items={tasksIds}>
+                    {tasks.map((task) => (
+                        <TaskCard
+                            key={task.id}
+                            task={task}
+                            deleteTask={deleteTask}
+                            updateTask={updateTask}
+                        />
+                    ))}
+                </SortableContext>
+            </div>
             <button className="flex gap-2 items-center border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"
                 onClick={() => {
                     createTask(column.id);

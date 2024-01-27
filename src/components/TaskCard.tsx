@@ -13,7 +13,7 @@ interface TaskCardProps {
 const TaskCard = ({ task, deleteTask, updateTask }: TaskCardProps) => {
 
     const [mouseIsOver, setMouseIsOver] = useState(false);
-    const [editMode, setEditMode] = useState(true);
+    const [editMode, setEditMode] = useState(false);
 
     const {
         setNodeRef,
@@ -41,6 +41,16 @@ const TaskCard = ({ task, deleteTask, updateTask }: TaskCardProps) => {
         setMouseIsOver(false);
     };
 
+    if (isDragging) {
+        return (
+          <div
+            ref={setNodeRef}
+            style={style}
+            className="opacity-30 bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl border-2 border-rose-500  cursor-grab relative"
+          />
+        );
+      }
+
     if (editMode) {
         return (
             <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative">
@@ -57,7 +67,7 @@ const TaskCard = ({ task, deleteTask, updateTask }: TaskCardProps) => {
     }
 
     return (
-        <div ref={setNodeRef} style={style} onClick={toggleEditMode} className="bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative task"
+        <div ref={setNodeRef} style={style} {...attributes} {...listeners} onDoubleClick={toggleEditMode} className="bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative task"
             onMouseEnter={() => {
                 setMouseIsOver(true);
             }}
